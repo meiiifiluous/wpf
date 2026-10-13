@@ -1,9 +1,12 @@
-﻿<Application x:Class="Configration.App"
+<Application x:Class="Configration.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Configration"
              StartupUri="Views/MainView.xaml">
     <Application.Resources>
-         
+        <!--字体资源-->
+        <FontFamily x:Key="Jinbuti">Asserts/Fonts/DingTalk-JinBuTi.ttf#钉钉进步体</FontFamily>
+        <FontFamily x:Key="Iconfont">Asserts/Fonts/iconfont.ttf#iconfont</FontFamily>
+        
     </Application.Resources>
 </Application>

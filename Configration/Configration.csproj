@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -9,8 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="ViewModels\" />
+    <Resource Include="Asserts\Fonts\DingTalk-JinBuTi.ttf" />
+    <Resource Include="Asserts\Fonts\iconfont.ttf" />
+    <Resource Include="Asserts\Images\*.png" />
+    <None Remove="Asserts\Fonts\iconfont.ttf" />
+    <Folder Include="Asserts\Styles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
   </ItemGroup>
 
 </Project>

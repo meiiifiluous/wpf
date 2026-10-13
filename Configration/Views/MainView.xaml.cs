@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Configration.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -20,6 +21,8 @@ namespace Configration.Views
         public MainView()
         {
             InitializeComponent();
+
+            this.DataContext = new MainViewModel();
         }
     }
 }

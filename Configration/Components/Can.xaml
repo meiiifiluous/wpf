@@ -1,0 +1,124 @@
+﻿<UserControl x:Class="Configration.Components.Can"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Configration.Components"
+             mc:Ignorable="d" 
+             d:DesignHeight="140"
+             d:DesignWidth="50">
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Duration="0:0:2"
+                                     From="0"
+                                     To="-120"
+                                     Storyboard.TargetName="tt"
+                                     Storyboard.TargetProperty="X"
+                                     RepeatBehavior="Forever"/>
+                    <DoubleAnimation Duration="0:0:2"
+                                     From="0"
+                                     To="360"
+                                     Storyboard.TargetName="rt"
+                                     Storyboard.TargetProperty="Angle"
+                                     RepeatBehavior="Forever"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </UserControl.Triggers>
+    <Grid>
+        <Canvas Margin="2,0">
+            <Canvas.Clip>
+                <RectangleGeometry Rect="0 0 46 140"
+                                   RadiusX="10"
+                                   RadiusY="10"/>
+            </Canvas.Clip>
+            <Path Data="M0,0               A30 30 0 0 1 30,0               A30 30 0 0 0 60,0               A30 30 0 0 1 90,0               A30 30 0 0 0 120,0               A30 30 0 0 1 150,0               A30 30 0 0 0 180,0               A30 30 0 0 1 210,0               A30 30 0 0 0 240,0               L240 140               0 140z"
+                  Fill="#7BB7FD"
+                  Canvas.Top="30">
+                <Path.RenderTransform>
+                    <TranslateTransform Y="45" x:Name="tt"/>
+                </Path.RenderTransform>
+            </Path>
+        </Canvas>
+
+        <Border Width="50"
+                Height="60"
+                Margin="0,55,0,0"
+                VerticalAlignment="Top">
+            <Path Data="M486.318719 399.383843c-41.099443-89.839328-11.032583-220.416849-11.032583-220.416849C465.254216 24.247118 332.025118 11.350483 332.025118 11.350483 147.216708 29.969322 175.874691 201.891935 175.874691 201.891935c30.63041 100.554011 159.79183 211.913018 242.11354 274.752502 11.794821-33.856375 36.529627-61.553433 68.330488-77.260594zM855.679052 464.62564c154.759613-9.266069 168.320948-142.430142 168.320948-142.430142-17.7121-184.89511-189.764764-157.096903-189.764764-157.096902-93.567431 28.007733-196.921132 141.042941-261.830579 222.707176 42.851506 8.294306 78.431045 36.706639 96.731983 74.995554 85.591025-21.942341 186.542412 1.824314 186.542412 1.824314zM560.031835 656.781881c29.127609 85.883638 8.539956 193.817992 8.539956 193.817992 15.920299 154.239413 149.546772 162.049644 149.546772 162.049644 183.952247-25.652381 148.780921-196.357581 148.780922-196.357582-28.145008-81.122359-122.26154-166.926522-201.94251-228.180117-21.245128 37.635053-59.801369 64.17611-104.92514 68.670063zM415.423354 557.907684c-91.071192 36.565752-218.51306 2.590164-218.51306 2.590164C41.937543 565.219389 24.474705 697.935511 24.474705 697.935511c12.286121 185.339448 185.093798 162.580682 185.093798 162.580682 96.132308-25.739081 204.998688-139.42454 272.014225-219.452311a136.310562 136.310562 0 0 1-66.159374-83.156198zM452.252819 520.716969a93.596331 93.126706 90 1 0 186.253411 0 93.596331 93.126706 90 1 0-186.253411 0Z"
+                  Fill="Orange"
+                  Stretch="Fill"
+                  RenderTransformOrigin="0.52,0.5"
+                  Width="40"
+                  Height="40">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <RotateTransform Angle="0" x:Name="rt"/>
+                        <ScaleTransform ScaleY="0.4"/>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+        </Border>
+
+        <Border Width="3"
+                Background="DarkOrange"
+                Height="85"
+                VerticalAlignment="Top"/>
+        <Border CornerRadius="40,40,0,0"
+                VerticalAlignment="Top"
+                Margin="0,5,0,0"
+                Height="30">
+            <Border.Background>
+                <RadialGradientBrush Center="0.5,1" GradientOrigin="0.5,1" RadiusY="0.8">
+                    <GradientStop Color="White" Offset="0"/>
+                    <GradientStop Color="#DDD" Offset="1"/>
+                </RadialGradientBrush>
+            </Border.Background>
+        </Border>
+        <Border Height="10"
+                Margin="15,0"
+                VerticalAlignment="Top"
+                BorderBrush="#AAA"
+                BorderThickness="0,1,0,0">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="DarkOrange" Offset="0"/>
+                    <GradientStop Color="White" Offset="0.5"/>
+                    <GradientStop Color="DarkOrange" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+        <Border Margin="0,35,0,20">
+            <Border.Background>
+                <RadialGradientBrush>
+                    <GradientStop Color="Transparent" Offset="0.85"/>
+                    <GradientStop Color="#FFF" Offset="0.9"/>
+                </RadialGradientBrush>
+            </Border.Background>
+        </Border>
+        <Border Height="20"
+                VerticalAlignment="Bottom"
+                CornerRadius="0,0,10,10">
+            <Border.Background>
+                <RadialGradientBrush Center="0.5,0" GradientOrigin="0.5,0" RadiusY="0.8">
+                    <GradientStop Color="White" Offset="0"/>
+                    <GradientStop Color="#DDD" Offset="1"/>
+                </RadialGradientBrush>
+            </Border.Background>
+        </Border>
+        <Border Width="16"
+                Height="16"
+                CornerRadius="10"
+                Background="OrangeRed"
+                VerticalAlignment="Top"
+                Margin="0,15,0,0">
+            <TextBlock Text="M"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       FontSize="9"
+                       FontWeight="Bold"/>
+        </Border>
+    </Grid>
+</UserControl>

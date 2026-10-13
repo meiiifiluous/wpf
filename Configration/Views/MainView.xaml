@@ -1,12 +1,1153 @@
-﻿<Window x:Class="Configration.Views.MainView"
+<Window x:Class="Configration.Views.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Configration.Views"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:c="clr-namespace:Configration.Components"
         mc:Ignorable="d"
-        Title="MainView" Height="450" Width="800">
+        Title="组态监控系统" 
+        Height="750" 
+        Width="1200"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="{StaticResource Jinbuti}">
+    <!-- 窗体无边框-->
+    <WindowChrome.WindowChrome>
+        <WindowChrome NonClientFrameEdges="None" UseAeroCaptionButtons="False"/>
+    </WindowChrome.WindowChrome>
+    <!--背景颜色渐变 -->
+    <Window.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#15212F" Offset="0"/>
+            <GradientStop Color="#1D2D3E" Offset="0.6"/>
+            <GradientStop Color="#15212F" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Window.Resources>
+        <Style TargetType="Button" x:Key="MenuButtonStyle">
+            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="5"
+                            Background="Transparent"
+                            Name="border">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="Transparent" Offset="0.5"/>
+                                            <GradientStop Color="#3FFF" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Button" x:Key="ExitButtonStyle">
+            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Path Data="M10 0 0 30 10 30"
+                              Fill="Orange"
+                              Stretch="Fill"
+                              Name="path"/>
+                            <Border Background="Orange"
+                                Grid.Column="1"
+                                CornerRadius="0,5,5,0"
+                                Name="border"/>
+                            <ContentPresenter Grid.ColumnSpan="2"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="path" Property="Fill" Value="#DD8F00"/>
+                                <Setter TargetName="border" Property="Background" Value="#DD8F00"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GroupBox">
+                        <Grid Background="#2000">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Ellipse Width="8"
+                                 Height="8"
+                                 Stroke="#9FFF"
+                                 StrokeThickness="1"
+                                 HorizontalAlignment="Left"
+                                 Margin="8,0"/>
+                            <Ellipse Width="4"
+                                 Height="4"
+                                 Fill="#9FFF"
+                                 HorizontalAlignment="Left"
+                                 Margin="10,0"/>
+                            <Line X1="0"
+                              Y1="0"
+                              X2="6"
+                              Y2="10"
+                              Stroke="#9FFF"
+                              StrokeThickness="1"
+                              VerticalAlignment="Bottom"
+                              Margin="14,1"/>
+                            <Border Height="1"
+                                Background="#9FFF"
+                                VerticalAlignment="Bottom"
+                                Margin="19.5,0,0,1"/>
+
+                            <Grid Margin="25,0,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter ContentSource="Header"
+                                              TextBlock.Foreground="White"
+                                              VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal"
+                                        Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Margin="15,0,0,0">
+                                    <Polyline Points="0 0 4 4 0 8"
+                                          Stroke="#3FFF"
+                                          StrokeThickness="1"
+                                          Margin="1,0"/>
+                                    <Polyline Points="0 0 4 4 0 8"
+                                          Stroke="#4FFF"
+                                          StrokeThickness="1"
+                                          Margin="1,0"/>
+                                    <Polyline Points="0 0 4 4 0 8"
+                                          Stroke="#5FFF"
+                                          StrokeThickness="1"
+                                          Margin="1,0"/>
+                                    <Polyline Points="0 0 4 4 0 8"
+                                          Stroke="#6FFF"
+                                          StrokeThickness="1"
+                                          Margin="1,0"/>
+                                    <Polyline Points="0 0 4 4 0 8"
+                                          Stroke="#7FFF"
+                                          StrokeThickness="1"
+                                          Margin="1,0"/>
+                                    <Polyline Points="0 0 4 4 0 8"
+                                          Stroke="#8FFF"
+                                          StrokeThickness="1"
+                                          Margin="1,0"/>
+                                </StackPanel>
+                            </Grid>
+
+
+                            <ContentPresenter Grid.Row="1" Margin="10"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="RadioButton" x:Key="DeviceTypeButtonStyle">
+            <Setter Property="Height" Value="22"/>
+            <Setter Property="Foreground" Value="#4FFF"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border BorderThickness="0,0,0,1"
+                            BorderBrush="Transparent"
+                            Name="border"
+                            Margin="5,0">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Foreground" Value="Orange"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="Orange"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Button" x:Key="ControlButtonStyle">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="10"/>
+                            </Grid.ColumnDefinitions>
+                            <Border>
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#416eda" Offset="0"/>
+                                        <GradientStop Color="#1845b3" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
+                            <Polygon Points="0 0  10 0  10 18 0 26" Grid.Column="1">
+                                <Polygon.Fill>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#416eda" Offset="0"/>
+                                        <GradientStop Color="#1845b3" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Polygon.Fill>
+                            </Polygon>
+                            <ContentPresenter VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"
+                                          Grid.ColumnSpan="2"
+                                          Margin="0,0,8,0"/>
+
+                            <Border Background="#5FFF"
+                                Width="3"
+                                CornerRadius="0,2,2,0"
+                                HorizontalAlignment="Left"
+                                Margin="0,5"/>
+
+                            <Border Background="Transparent"
+                                Grid.ColumnSpan="2"
+                                Name="border"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#3000"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
+        <!-- 渲染网格-->
+        <Grid.Background>
+            <VisualBrush Viewport="0,0,10,10" ViewportUnits="Absolute" TileMode="Tile" Opacity="0.3">
+                <VisualBrush.Visual>
+                    <Border Width="10" Height="10" BorderThickness="1,1,0,0" BorderBrush="#1FFF"/>
+                </VisualBrush.Visual>
+            </VisualBrush>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <!--logo-->
+        <Image Source="/Asserts/Images/logo_cyan.png"
+               Height="28"
+               HorizontalAlignment="Left"
+               Margin="10,0"></Image>
+        <StackPanel HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Margin="45,0">
+            <TextBlock Text="智慧工厂"
+                       Foreground="White"
+                       FontWeight="Bold"
+                       />
+            <TextBlock Text="SMARTFactory"
+                       Foreground="#5FFF"/>
+
+
+        </StackPanel>
+
+        <!--title与背景-->
+        <Path Data="M0,0 13 25C20,38 20,38 40,38L390 38C410 38 410 38 417 25L430 0"
+              StrokeThickness="1"
+              VerticalAlignment="Top"
+              HorizontalAlignment="Center"
+              Width="650"
+              Height="30"
+              Stretch="Fill">
+            <Path.Stroke>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#0FFF" Offset="0.3"/>
+                    <GradientStop Color="#7FFF" Offset="1"/>
+                </LinearGradientBrush>
+            </Path.Stroke>
+        </Path>
+        <Path Data="M0,0 13 25C20,38 20,38 40,38L390 38C410 38 410 38 417 25L430 0"
+              StrokeThickness="1"
+              VerticalAlignment="Top"
+              HorizontalAlignment="Center"
+              Width="400"
+              Height="40"
+              Stretch="Fill">
+            <!--渐变色-->
+            <Path.Stroke>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#0FFF" Offset="0"/>
+                    <GradientStop Color="#7FFF" Offset="1"/>
+                </LinearGradientBrush>
+            </Path.Stroke>
+            <!--内部填充径向渐变-->
+            <Path.Fill>
+                <RadialGradientBrush Center="0.5,1" GradientOrigin="0.5,1">
+                    <GradientStop Color="#385FB0" Offset="0"/>
+                    <GradientStop Color="#152230" Offset="1"/>
+                </RadialGradientBrush>
+            </Path.Fill>
+        </Path>
+        <Grid  Width="580">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="400"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="工厂设备机械管理监控"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Foreground="White"
+                   FontSize="20"
+                   Grid.Column="1"  
+                   />
+            <Button Content="设备介绍"
+                Height="30"
+                FontSize="14"
+                Foreground="#8FFF"
+                VerticalAlignment="Top"
+                Style="{StaticResource MenuButtonStyle}"    />
+            <Button Content="系统设置"
+                    Grid.Column="2"
+                    Height="30"
+                    FontSize="14"
+                    Foreground="#8FFF"
+                    VerticalAlignment="Top"
+                    Style="{StaticResource MenuButtonStyle}" />
+        </Grid>
+        <!--时间以及退出-->
+        <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center">
+            <StackPanel>
+                <TextBlock Text="20:00:00"
+                           Foreground="White"
+                           FontSize="16"/>
+                <TextBlock Text="周一 2025/06/02"
+                           Foreground="#6FFF"
+                           FontSize="10">
+                    <TextBlock.RenderTransform>
+                        <ScaleTransform ScaleX="0.9"/>
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+            </StackPanel>
+            <Button Content="退出系统"
+                    Foreground="White"
+                    Width="80"
+                    Height="30"
+                    Margin="10,0"
+                    Style="{StaticResource ExitButtonStyle}"/>
+        </StackPanel>
         
-    </Grid>
+        <!--主要内容 第二行 分为两列-->
+        <!--主要面板 第一列--> 
+        <Grid Grid.Row="1" Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <!--第一列 等分 -->
+            <UniformGrid Columns="1">
+                <GroupBox Header="设备配置详情">
+                    <Grid Margin="10,10,10,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="79"
+                                       Foreground="White"
+                                       FontSize="22"
+                                       VerticalAlignment="Bottom"/>
+                            <TextBlock Text="设备负载"
+                                       Foreground="#4FFF"
+                                       VerticalAlignment="Bottom"
+                                       Margin="10,0,0,2"/>
+                        </StackPanel>
+                        <!--进度条-->
+                        <ProgressBar Background="#2000"
+                                     Foreground="Orange"
+                                     Minimum="0"
+                                     Maximum="100"
+                                     Value="79"
+                                     Height="3"
+                                     Grid.Row="1"
+                                     BorderThickness="0"/>
+                        <!--分块-->
+                        <UniformGrid Grid.Row="2" Margin="0,10,0,0">
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center">
+                                <!--图片+信息-->
+                                <Image Source="/Asserts/Images/d1.png"  Stretch="None" Margin="0,15"/>
+                                <StackPanel VerticalAlignment="Center" Margin="8,0,0,0">
+                                    <TextBlock Text="12.3"
+                                               Foreground="White"
+                                               FontSize="14"/>
+                                    <TextBlock Text="设备大小(m3)"
+                                                      Foreground="#3FFF"
+                                                      FontSize="10"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center">
+                                <Image Source="/Asserts/Images/d2.png"  Stretch="None" Margin="0,15"/>
+                                <StackPanel VerticalAlignment="Center" Margin="8,0,0,0">
+                                    <TextBlock Text="12.3"
+                                               Foreground="White"
+                                               FontSize="14"/>
+                                    <TextBlock Text="质量(t)"
+                                               Foreground="#3FFF"
+                                               FontSize="10"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal"
+                                                     Margin="8,0,0,0"
+                                                     VerticalAlignment="Center">
+                                <Image Source="/Asserts/Images/d3.png"  Stretch="None" Margin="0,15"/>
+                                <StackPanel VerticalAlignment="Center" Margin="8,0,0,0">
+                                    <TextBlock Text="12.3"
+                                               Foreground="White"
+                                               FontSize="14"/>
+                                    <TextBlock Text="压强(mpa)"
+                                               Foreground="#3FFF"
+                                               FontSize="10"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center">
+                                <Image Source="/Asserts/Images/d3.png"  Stretch="None" Margin="0,15"/>
+                                <StackPanel VerticalAlignment="Center" Margin="8,0,0,0">
+                                    <TextBlock Text="12.3"
+                                               Foreground="White"
+                                               FontSize="14"/>
+                                    <TextBlock Text="技术员(人)"
+                                               Foreground="#3FFF"
+                                               FontSize="10"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </UniformGrid>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="机械设备清单">
+                    <Grid TextBlock.FontSize="11"
+                          TextBlock.Foreground="#4FFF"
+                          Margin="10,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <!--第一行-->
+                        <Border HorizontalAlignment="Right"
+                                BorderBrush="#5FFF"
+                                BorderThickness="1,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#44477CD3" Offset="0"/>
+                                    <GradientStop Color="#00477CD3" Offset="0.5"/>
+                                    <GradientStop Color="#44477CD3" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <UniformGrid Rows="1" Margin="8,0">
+                                <RadioButton Content="维护"
+                                             IsChecked="True"
+                                             Style="{StaticResource DeviceTypeButtonStyle}"/>
+                                <RadioButton Content="信息" Style="{StaticResource DeviceTypeButtonStyle}"/>
+                            </UniformGrid>
+                        </Border>
+                        <!--第二行-->
+                        <Grid Grid.Row="1"
+                              VerticalAlignment="Bottom"
+                              Margin="0,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="设备编号"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="开机时间"
+                                       Grid.Column="1"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="运行功率"
+                                       Grid.Column="2"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="工作时间"
+                                       Grid.Column="3"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"/>
+                        </Grid>
+                        <!--第三行 数据-->
+                        <ItemsControl ItemsSource="{Binding DeviceList}" Grid.Row="2">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Height="24">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding DeviceNum}"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{Binding StartTime}"
+                                                    Grid.Column="1"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{Binding Power}"
+                                                    Grid.Column="2"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{Binding WorkTime}"
+                                                    Grid.Column="3"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="设备处理状态统计">
+                    <ItemsControl ItemsSource="{Binding StateList}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="1"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="9"/>
+                                    </Grid.RowDefinitions>
+                                    <Border CornerRadius="3"
+                                            BorderThickness="1"
+                                            BorderBrush="#5FFF"
+                                            Width="30"
+                                            Height="30"
+                                            Grid.RowSpan="2">
+                                        <Image Source="{Binding Icon}"/>
+                                    </Border>
+
+                                    <Border Grid.Column="1"
+                                            Height="20"
+                                            Margin="5,0">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                <GradientStop Color="#44477CD3" Offset="0"/>
+                                                <GradientStop Color="#00477CD3" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                    </Border>
+                                    <TextBlock Text="{Binding Header}"
+                                               Grid.Column="1"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Left"
+                                               Foreground="#5FFF"
+                                               Margin="10,0"/>
+                                    <TextBlock Text="{Binding Value, StringFormat={}{0}%}"
+                                               Grid.Column="1"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Right"
+                                               Foreground="#3FFF"
+                                               Margin="10,0"/>
+                                               <ProgressBar Height="3"
+                                                 Grid.Row="1"
+                                                 Grid.Column="1"
+                                                 Background="#2000"
+                                                 Foreground="Orange"
+                                                 BorderThickness="0"
+                                                 VerticalAlignment="Top"
+                                                 Value="{Binding Value}"
+                                                 Margin="5,0"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </GroupBox>
+            </UniformGrid>
+            <!--主要面板 第二列-->
+            <Grid Grid.Column="1">
+                <!--分为两行-->
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="180"/>
+                </Grid.RowDefinitions>
+
+                <Canvas>
+                    <!--管道-->
+                    <Path Data="M35 0 120 0 C150 0 150 0 150 30L150 250C150 280 150 280 180 280"
+                          StrokeThickness="8"
+                          Stroke="#887BB7FD"
+                          Canvas.Left="177"
+                          Canvas.Top="174"/>
+                    <Path Data="M35 0 120 0 C150 0 150 0 150 30L150 250C150 280 150 280 180 280"
+                          StrokeThickness="4"
+                          StrokeDashArray="3,3"
+                          Stroke="#409EFE"
+                          StrokeDashOffset="0"
+                          Canvas.Left="177"
+                          Canvas.Top="174"
+                          Name="path2"/>
+                    <Path Data="M215 454 360 454C390 454 390 454 390 425                       L390 80 C390 50 390 50 420 50                       L450 50"
+                          StrokeThickness="8"
+                          Stroke="#887BB7FD"/>
+                    <Path Data="M215 454 360 454C390 454 390 454 390 425                       L390 80 C390 50 390 50 420 50                       L450 50"
+                          StrokeThickness="4"
+                          StrokeDashArray="3,3"
+                          Stroke="#409EFE"
+                          StrokeDashOffset="0"
+                          Name="path1"/>
+                    <Path Data="M390 360C390 330 390 330 420 330h40"
+                          StrokeThickness="8"
+                          Stroke="#887BB7FD"/>
+                    <Path Data="M390 360C390 330 390 330 420 330h40"
+                          StrokeThickness="4"
+                          StrokeDashArray="3,3"
+                          Stroke="#409EFE"
+                          StrokeDashOffset="0"
+                          Name="path3"/>
+                    <Path Data="M292 100v20C292 150 292 150 322 150L350 150                             C370 150 370 150 370 120L370 110                             C370 80 370 80 400 80h30"
+                          StrokeThickness="8"
+                          Stroke="#AAFFA500"/>
+                    <Path Data="M292 100v20C292 150 292 150 322 150L350 150                             C370 150 370 150 370 120L370 110                             C370 80 370 80 400 80h30"
+                          StrokeThickness="4"
+                          StrokeDashArray="3,3"
+                          Stroke="#FFA500"
+                          Name="path4"/>
+                    <Path Data="M251,320v20C251 370 251 370 281 370h160"
+                          StrokeThickness="8"
+                          Stroke="#AAFFA500"/>
+                    <Path Data="M251,320v20C251 370 251 370 281 370h160"
+                          StrokeThickness="4"
+                          StrokeDashArray="3,3"
+                          Stroke="#FFA500"
+                          Name="path5"/>
+                    <Path Data="M478 160h30C530 160 538 160 538 130v-20C538 80 538 80 568 80h40"
+                          StrokeThickness="8"
+                          Stroke="#AAFFA500"/>
+                    <Path Data="M478 160h30C530 160 538 160 538 130v-20C538 80 538 80 568 80h40"
+                          StrokeThickness="4"
+                          StrokeDashArray="3,3"
+                          Stroke="#FFA500"
+                          Name="path6"/>
+                    <Path Data="M478 440h30C530 440 538 440 538 410v-20C538 360 538 360 568 360h40"
+                          StrokeThickness="8"
+                          Stroke="#AAFFA500"/>
+                    <Path Data="M478 440h30C530 440 538 440 538 410v-20C538 360 538 360 568 360h40"
+                          StrokeThickness="4"
+                          StrokeDashArray="3,3"
+                          Stroke="#FFA500"
+                          Name="path7"/>
+                    <Path Data="M650 155h200"
+                          StrokeThickness="8"
+                          Stroke="#AAFFA500"/>
+                    <Path Data="M650 155h200"
+                          StrokeThickness="4"
+                          StrokeDashArray="3,3"
+                          Stroke="#FFA500"
+                          Name="path8"/>
+                    <Path Data="M650 440h200"
+                          StrokeThickness="8"
+                          Stroke="#AAFFA500"/>
+                    <Path Data="M650 440h200"
+                          StrokeThickness="4"
+                          StrokeDashArray="3,3"
+                          Stroke="#FFA500"
+                          Name="path9"/>
+                    <!--水箱组件-->
+                    <c:Tank Width="100"
+                        Height="100"
+                        Canvas.Top="376"
+                        Canvas.Left="124"
+                        Level="65"/>
+                    <c:Tank Width="100"
+                        Height="100"
+                        Canvas.Top="102"
+                        Canvas.Left="120"
+                        Level="34"/>
+
+                    <!--搅拌罐组件-->
+                    <c:Can Width="50"
+                           Height="140"
+                           Canvas.Left="438"
+                           Canvas.Top="38"/>
+                    <c:Can Width="50"
+                           Height="140"
+                           Canvas.Left="607"
+                           Canvas.Top="325"/>
+                    <c:Can Width="50"
+                           Height="140"
+                           Canvas.Left="435"
+                           Canvas.Top="325"/>
+                    <c:Can Width="50"
+                           Height="140"
+                           Canvas.Left="607"
+                           Canvas.Top="45"/>
+                    <!--过滤器-->
+                    <c:Feed Width="50"
+                            Height="73"
+                            Canvas.Left="266"
+                            Canvas.Top="28"/>
+                    <c:Feed Width="50"
+                            Height="73"
+                            Canvas.Left="226"
+                            Canvas.Top="251"/>
+                    <!--阀门-->
+                    <c:Valve Width="40"
+                             Height="40"
+                             Canvas.Left="258"
+                             Canvas.Top="434"
+                             IsOpen="False"/>
+                    <c:Valve Width="40"
+                             Height="40"
+                             Canvas.Left="702"
+                             Canvas.Top="420"
+                             IsOpen="True"/>
+                    <c:Valve Width="40"
+                             Height="40"
+                             Canvas.Left="696"
+                             Canvas.Top="135"
+                             IsOpen="False"/>
+                    <c:Valve Width="40"
+                             Height="40"
+                             Canvas.Left="252"
+                             Canvas.Top="154"
+                             IsOpen="True"/>
+                    
+                    <!--报警灯-->
+                    <c:WarningLight Width="14"
+                                    Canvas.Left="536"
+                                    Canvas.Top="215"
+                                    State="Fault"/>
+                    <c:WarningLight Width="15"
+                                    Canvas.Left="747"
+                                    Canvas.Top="362"
+                                    State="Warning"/>
+                    <c:WarningLight Width="15"
+                                    Canvas.Left="747"
+                                    Canvas.Top="79"
+                                    State="Run"/>
+                    <c:WarningLight Width="25"
+                                    Canvas.Left="177"
+                                    Canvas.Top="250"
+                                    State="Run"/>
+                </Canvas>
+                <!--  控制按钮  -->
+                <StackPanel VerticalAlignment="Top"
+                            HorizontalAlignment="Left"
+                            Margin="10">
+                    <Button Style="{StaticResource ControlButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xe65c;"
+                                       FontFamily="{StaticResource Iconfont}"
+                                       VerticalAlignment="Center"
+                                       Margin="5,0"/>
+                            <TextBlock Text="电机解锁"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource ControlButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xe616;"
+                                       FontFamily="{StaticResource Iconfont}"
+                                       VerticalAlignment="Center"
+                                       Margin="5,0"/>
+                            <TextBlock Text="一键启动"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource ControlButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xe612;"
+                                       FontFamily="{StaticResource Iconfont}"
+                                       VerticalAlignment="Center"
+                                       Margin="5,0"/>
+                            <TextBlock Text="一键禁止"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Content="保养手册" Style="{StaticResource ControlButtonStyle}"/>
+                    <Button Content="安全设置" Style="{StaticResource ControlButtonStyle}"/>
+                    <Button Content="联系我们" Style="{StaticResource ControlButtonStyle}"/>
+                </StackPanel>
+                <!--开机信息-->
+                <Grid VerticalAlignment="Bottom"
+                      HorizontalAlignment="Left"
+                      Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Margin="0,10">
+                        <TextBlock Text="456.7"
+                                   FontSize="18"
+                                   Foreground="#8FFF"
+                                   HorizontalAlignment="Left"/>
+                        <TextBlock Text="工作时间(min)"
+                                   Foreground="#4FFF"
+                                   FontSize="10"
+                                   HorizontalAlignment="Left"/>
+                    </StackPanel>
+                    <Border VerticalAlignment="Bottom"
+                            Height="1"
+                            Width="100">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                <GradientStop Color="#4FFF" Offset="0"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+
+
+                    <StackPanel Margin="0,10" Grid.Row="1">
+                        <TextBlock Text="1234"
+                                   FontSize="18"
+                                   Foreground="Gold"
+                                   HorizontalAlignment="Left"/>
+                        <TextBlock Text="设备功率(kw)"
+                                   Foreground="#4FFF"
+                                   FontSize="10"
+                                   HorizontalAlignment="Left"/>
+                    </StackPanel>
+                    <Border VerticalAlignment="Bottom"
+                            Grid.Row="1"
+                            Height="1"
+                            Width="100">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                <GradientStop Color="#4FFF" Offset="0"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+
+
+                    <StackPanel Margin="0,10" Grid.Row="2">
+                        <TextBlock Text="20:00"
+                                   FontSize="18"
+                                   Foreground="#8FFF"
+                                   HorizontalAlignment="Left"/>
+                        <TextBlock Text="开机时间"
+                                   Foreground="#4FFF"
+                                   FontSize="10"
+                                   HorizontalAlignment="Left"/>
+                    </StackPanel>
+                    <Border VerticalAlignment="Bottom"
+                            Grid.Row="2"
+                            Height="1"
+                            Width="100">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                <GradientStop Color="#4FFF" Offset="0"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+                </Grid>
+                <!--设备运行数据统计-->
+                <GroupBox Grid.Row="1" Header="设备运行数据统计">
+                    <Grid>
+                        <!--分为标题和表-->
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="33"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <!--四列-->
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Border HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                BorderBrush="#5FFF"
+                                BorderThickness="1,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#44477CD3" Offset="0"/>
+                                    <GradientStop Color="#00477CD3" Offset="0.5"/>
+                                    <GradientStop Color="#44477CD3" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <TextBlock Text="设备使用率"
+                                       Foreground="#4FFF"
+                                       Margin="15,5"/>
+                        </Border>
+                        <Border HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                BorderBrush="#5FFF"
+                                BorderThickness="1,0"
+                                Grid.Column="1">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#44477CD3" Offset="0"/>
+                                    <GradientStop Color="#00477CD3" Offset="0.5"/>
+                                    <GradientStop Color="#44477CD3" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <TextBlock Text="设备磨损率"
+                                       Foreground="#4FFF"
+                                       Margin="15,5"/>
+                        </Border>
+                        <Border HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                BorderBrush="#5FFF"
+                                BorderThickness="1,0"
+                                Grid.Column="2">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#44477CD3" Offset="0"/>
+                                    <GradientStop Color="#00477CD3" Offset="0.5"/>
+                                    <GradientStop Color="#44477CD3" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <TextBlock Text="设备故障率"
+                                       Foreground="#4FFF"
+                                       Margin="15,5"/>
+                        </Border>
+                        <Border HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                BorderBrush="#5FFF"
+                                BorderThickness="1,0"
+                                Grid.Column="3">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#44477CD3" Offset="0"/>
+                                    <GradientStop Color="#00477CD3" Offset="0.5"/>
+                                    <GradientStop Color="#44477CD3" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <TextBlock Text="设备检修率"
+                                       Foreground="#4FFF"
+                                       Margin="15,5"/>
+                        </Border>
+                        <!--折现图-->
+                        <lvc:CartesianChart Grid.Row="1" Margin="10,5,10,0">
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries Values="10,25,43,30,80"
+                                                PointGeometrySize="0"
+                                                Stroke="#4F607D"
+                                                Title="使用率">
+                                    <lvc:LineSeries.Fill>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#1FFF" Offset="0"/>
+                                            <GradientStop Color="#0FFF" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </lvc:LineSeries.Fill>
+                                </lvc:LineSeries>
+                            </lvc:CartesianChart.Series>
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Labels="09:00,12:00,15:00,18:00,21:00" FontSize="9">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator Step="1"
+                                                       Stroke="#2FFF"
+                                                       StrokeDashArray="2,2"/>
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis MinValue="0"
+                                          MaxValue="100"
+                                          FontSize="9">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator Step="25" StrokeThickness="0"/>
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
+                        <!--柱形图-->
+                        <lvc:CartesianChart Grid.Row="1"
+                                            Grid.Column="1"
+                                            Margin="10,5,10,0">
+                            <lvc:CartesianChart.Series>
+                                <lvc:ColumnSeries Values="10,25,43,30,80"
+                                                  MaxColumnWidth="12"
+                                                  Fill="#409EFE"
+                                                  Stroke="#4F607D"
+                                                  Title="磨损率">
+                                </lvc:ColumnSeries>
+                            </lvc:CartesianChart.Series>
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Labels="09:00,12:00,15:00,18:00,21:00" FontSize="9">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator Step="1"
+                                                       Stroke="#2FFF"
+                                                       StrokeDashArray="2,2"/>
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis MinValue="0"
+                                          MaxValue="100"
+                                          FontSize="9">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator Step="25" StrokeThickness="0"/>
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
+
+                        <lvc:CartesianChart Grid.Row="1"
+                                            Grid.Column="2"
+                                            Margin="10,5,10,0">
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries Values="10,25,43,30,80"
+                                                PointGeometrySize="0"
+                                                Stroke="#4F607D"
+                                                Title="使用率">
+                                    <lvc:LineSeries.Fill>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#1FFF" Offset="0"/>
+                                            <GradientStop Color="#0FFF" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </lvc:LineSeries.Fill>
+                                </lvc:LineSeries>
+                            </lvc:CartesianChart.Series>
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Labels="09:00,12:00,15:00,18:00,21:00" FontSize="9">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator Step="1"
+                                                       Stroke="#2FFF"
+                                                       StrokeDashArray="2,2"/>
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis MinValue="0"
+                                          MaxValue="100"
+                                          FontSize="9">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator Step="25" StrokeThickness="0"/>
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
+
+                        <lvc:CartesianChart Grid.Row="1"
+                                            Grid.Column="3"
+                                            Margin="10,5,10,0">
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries Values="10,25,43,30,80"
+                                                PointGeometrySize="0"
+                                                Stroke="#4F607D"
+                                                Title="使用率">
+                                    <lvc:LineSeries.Fill>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#1FFF" Offset="0"/>
+                                            <GradientStop Color="#0FFF" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </lvc:LineSeries.Fill>
+                                </lvc:LineSeries>
+                            </lvc:CartesianChart.Series>
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Labels="09:00,12:00,15:00,18:00,21:00" FontSize="9">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator Step="1"
+                                                       Stroke="#2FFF"
+                                                       StrokeDashArray="2,2"/>
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis MinValue="0"
+                                          MaxValue="100"
+                                          FontSize="9">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator Step="25" StrokeThickness="0"/>
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
+                        
+                    </Grid>
+                </GroupBox>
+                <!--运行时信息-->
+                <Grid Width="200" HorizontalAlignment="Right">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Border HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             BorderBrush="#5FFF"
+                             BorderThickness="1,0"
+                             Margin="0,10">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                <GradientStop Color="#44477CD3" Offset="0"/>
+                                <GradientStop Color="#00477CD3" Offset="0.5"/>
+                                <GradientStop Color="#44477CD3" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <TextBlock Text="实时信息提醒"
+                    Foreground="Orange"
+                    Margin="15,5"/>
+                    </Border>
+                    <ItemsControl ItemsSource="{Binding MessageList}" Grid.Row="1">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Height="22" TextBlock.Foreground="#2FFF">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="40"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Message}"
+                                                VerticalAlignment="Center"
+                                                TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock Text="{Binding Date}"
+                                                Grid.Column="1"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </Grid>
+        </Grid>
+
+
+        </Grid>
 </Window>
